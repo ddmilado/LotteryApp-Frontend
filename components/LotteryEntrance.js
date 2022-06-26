@@ -108,8 +108,12 @@ export default function LotteryEntrance() {
     }
 
     return (
-        <div className="p-5">
-            <h1 className="py-4 px-4 font-bold text-3xl">Lottery</h1>
+
+         <div className= " my-20 mx-20 ">
+        <div className=" bg-blue-600  rounded-lg" >
+
+        <div className="p-5 ">
+            <h1 className="py-4 px-4 mx-24 font-bold text-5xl text-white justify-self-center">Lottery Pot</h1>
             {raffleAddress ? (
                 <>
                     <button
@@ -130,13 +134,15 @@ export default function LotteryEntrance() {
                             "Enter Raffle"
                         )}
                     </button>
-                    <div>Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
-                    <div>The current number of players is: {numberOfPlayers}</div>
-                    <div>The most previous winner was: {recentWinner}</div>
+                    <div className="py-1 px-1 font-bold text-1xl text-white" >Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
+                    <div className="py-1 px-1 font-bold text-1xl text-white">The current number of players is: {numberOfPlayers}</div>
+                    <div className="py-1 px-1 font-bold text-1xl text-white">The most previous winner was: {recentWinner}</div>
                 </>
             ) : (
                 <div>Please connect to a supported chain </div>
             )}
         </div>
+         </div>
+          </div>
     )
 }
