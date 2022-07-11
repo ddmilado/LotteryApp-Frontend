@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "magic-sdk": "^8.1.1",
+    "moment": "^2.29.4",
     "moralis": "^1.8.0",
     "next": "12.1.5",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+    "react-moment": "^1.1.2",
     "react-moralis": "^1.4.0",
     "web3uikit": "^0.1.159"
   },

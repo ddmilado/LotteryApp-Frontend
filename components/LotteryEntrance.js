@@ -5,8 +5,10 @@ import { useMoralis } from "react-moralis"
 import { useEffect, useState } from "react"
 import { useNotification } from "web3uikit"
 import { ethers } from "ethers"
-
+// import Moment from 'react-moment';
+// Moment.globalFormat = 'D MMM YYYY';
 export default function LotteryEntrance() {
+    
     const { Moralis, isWeb3Enabled, chainId: chainIdHex } = useMoralis()
     // These get re-rendered every time due to our connect button!
     const chainId = parseInt(chainIdHex)
@@ -18,6 +20,8 @@ export default function LotteryEntrance() {
     const [entranceFee, setEntranceFee] = useState("0")
     const [numberOfPlayers, setNumberOfPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
+    // const [nextRaffleTime, setNextRaffleTime] = useState("0")
+    const [lastTimestamp, setLastTimestamp] = useState("0")
 
     const dispatch = useNotification()
 
@@ -57,6 +61,20 @@ export default function LotteryEntrance() {
         params: {},
     })
 
+    // const { runContractFunction: getNextRaffleTime } = useWeb3Contract({
+    //     abi: abi,
+    //     contractAddress: raffleAddress, // specify the networkId
+    //     functionName: "getNextRaffleTime",
+    //     params: {},
+    // })
+
+    const { runContractFunction: getLastTimeStamp } = useWeb3Contract({
+        abi: abi,
+        contractAddress: raffleAddress, // specify the networkId
+        functionName: "getLastTimeStamp",
+        params: {},
+    })
+
     async function updateUIValues() {
         // Another way we could make a contract call:
         // const options = { abi, contractAddress: raffleAddress }
@@ -67,9 +85,13 @@ export default function LotteryEntrance() {
         const entranceFeeFromCall = (await getEntranceFee()).toString()
         const numPlayersFromCall = (await getPlayersNumber()).toString()
         const recentWinnerFromCall = await getRecentWinner()
+        // const nextRaffleTimeFromCall = await getNextRaffleTime()
+        const lastTimestampFromCall = (await getLastTimeStamp()).toString()
         setEntranceFee(entranceFeeFromCall)
         setNumberOfPlayers(numPlayersFromCall)
         setRecentWinner(recentWinnerFromCall)
+        // setNextRaffleTime(nextRaffleTimeFromCall)
+        setLastTimestamp(lastTimestampFromCall)
     }
 
     useEffect(() => {
@@ -107,9 +129,27 @@ export default function LotteryEntrance() {
         handleNewNotification(tx)
     }
 
+
+    // const parsed = moment.unix(lastTimestamp);
+    // const test = new Date(lastTimestamp);
+
+
+   
+    // var converted_date = Moment(date)
+    // var {date} =  new Date(unixTimestamp*1000);
+
+    var unixTimestamp = parseFloat(lastTimestamp) + 600;
+    // var date = new Date(unixTimestamp *1000);
+    // const datee = [date];
+
+
+
+    
+
     return (
 
          <div className= " my-20 mx-20 ">
+
         <div className=" bg-blue-600  rounded-lg" >
 
         <div className="p-5 ">
@@ -131,12 +171,14 @@ export default function LotteryEntrance() {
                         {isLoading || isFetching ? (
                             <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
                         ) : (
-                            "Enter Raffle"
+                            "Play Lottery"
                         )}
                     </button>
-                    <div className="py-1 px-1 font-bold text-1xl text-white" >Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH</div>
-                    <div className="py-1 px-1 font-bold text-1xl text-white">The current number of players is: {numberOfPlayers}</div>
-                    <div className="py-1 px-1 font-bold text-1xl text-white">The most previous winner was: {recentWinner}</div>
+                    <div className="py-1 px-1 font-bold text-1xl text-white" >Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} BNB</div>
+                    <div className="py-1 px-1 font-bold text-1xl text-white">Current number of players: {numberOfPlayers}</div>
+                    <div className="py-1 px-1 font-bold text-1xl text-white">Most recent winner: {recentWinner}</div>
+                    <div className="py-1 px-1 font-bold text-1xl text-white">Next Rafle on : { Date(unixTimestamp *1000)}</div>
+                    
                 </>
             ) : (
                 <div>Please connect to a supported chain </div>
